@@ -19,6 +19,7 @@ public partial class MaxSubarraySolver
 
         int leftMax = FindMaxProfit(nums, left, mid);
         int rightMax = FindMaxProfit(nums, mid + 1, right);
+        
         int crossMax = FindMaxProfit(nums, left, mid, right);
 
         return Math.Max(Math.Max(leftMax, rightMax), crossMax);
