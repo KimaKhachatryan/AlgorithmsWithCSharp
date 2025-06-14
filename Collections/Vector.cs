@@ -11,7 +11,7 @@ public class Vector<T> : IEnumerable<T>
 
     public Vector()
     {
-        _items = new T[4];
+        _items = [];
         _count = 0;
         _capacity = 0;
     }
@@ -20,7 +20,7 @@ public class Vector<T> : IEnumerable<T>
     {
         if (_count == _capacity)
         {
-            ResizeArray(_capacity * 2);
+            ResizeArray(_capacity == 0 ? 1 : _capacity * 2);
         }
         _items[_count++] = item;
     }
