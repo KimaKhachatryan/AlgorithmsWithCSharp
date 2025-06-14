@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Algorithms_CSharp.Collections;
 
-public class SinglyLinkedList<T> : IEnumerable<T>
+public class SinglyLinkedList<T> : IEnumerable<T> where T : IComparable<T>
 {
     private ListNode<T>? _head;
     private long _count;
@@ -140,8 +140,9 @@ public class SinglyLinkedList<T> : IEnumerable<T>
             return head;
 
         var middle = GetMidElem(head);
-        var nextToMiddle = middle.Next!;
-        middle.Next = null;
+        var nextToMiddle = middle?.Next;
+        if (middle != null)
+            middle.Next = null;
 
         var left = MergeSort(head);
         var right = MergeSort(nextToMiddle);
