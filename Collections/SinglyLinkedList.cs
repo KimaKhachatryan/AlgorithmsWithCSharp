@@ -4,7 +4,7 @@ namespace Algorithms_CSharp.Collections;
 
 public class SinglyLinkedList<T> : IEnumerable<T> where T : IComparable<T>
 {
-    private ListNode<T>? _head;
+    internal ListNode<T>? _head;
     private long _count;
 
     public long Count => _count;
@@ -85,7 +85,7 @@ public class SinglyLinkedList<T> : IEnumerable<T> where T : IComparable<T>
         }
 
         // For even-sized lists, return the first of the two middle nodes
-        return prev ?? slow;
+        return (fast == null) ? prev : slow;
     }
 
     public bool HasCycle()
@@ -167,6 +167,39 @@ public class SinglyLinkedList<T> : IEnumerable<T> where T : IComparable<T>
             b.Next = SortedMerge(a, b.Next);
             return b;
         }
+    }
+
+    public void InsertionSort()
+    {
+        if (_head == null || _head.Next == null)
+            return;
+
+        var dummy = new ListNode<T>(default!);
+        dummy.Next = _head;
+
+        var curr = _head;
+        while (curr != null && curr.Next != null)
+        {
+            if (curr.Next.Value.CompareTo(curr.Value) < 0)
+            {
+                var toInsert = curr.Next;
+                curr.Next = toInsert.Next;
+
+                var pos = dummy;
+                while (pos.Next != null && pos.Next.Value.CompareTo(toInsert.Value) < 0)
+                {
+                    pos = pos.Next;
+                }
+                toInsert.Next = pos.Next;
+                pos.Next = toInsert;
+            }
+            else
+            {
+                curr = curr.Next;
+            }
+        }
+
+        _head = dummy.Next;
     }
     public IEnumerator<T> GetEnumerator()
     {
