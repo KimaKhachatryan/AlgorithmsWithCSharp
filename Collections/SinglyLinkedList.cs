@@ -69,20 +69,23 @@ public class SinglyLinkedList<T> : IEnumerable<T>
         _count = 0;
     }
 
-    public ListNode<T>? GetMidElem()
+    public ListNode<T>? GetMidElem(ListNode<T>? head)
     {
-        if (_head == null) return null;
+        if (head == null) return null;
 
-        ListNode<T>? slow = _head;
-        ListNode<T>? fast = _head;
+        ListNode<T>? slow = head;
+        ListNode<T>? fast = head;
+        ListNode<T>? prev = null;
 
         while (fast != null && fast.Next != null)
         {
+            prev = slow;
             slow = slow!.Next;
             fast = fast.Next.Next;
         }
 
-        return slow;
+        // For even-sized lists, return the first of the two middle nodes
+        return prev ?? slow;
     }
 
     public bool HasCycle()
@@ -126,7 +129,44 @@ public class SinglyLinkedList<T> : IEnumerable<T>
         }
         _head = prev;
     }
+    public void MergeSort()
+    {
+        _head = MergeSort(_head);
+    }
 
+    private ListNode<T>? MergeSort(ListNode<T>? head)
+    {
+        if (head == null || head.Next == null)
+            return head;
+
+        var middle = GetMidElem(head);
+        var nextToMiddle = middle.Next!;
+        middle.Next = null;
+
+        var left = MergeSort(head);
+        var right = MergeSort(nextToMiddle);
+
+        return SortedMerge(left, right);
+    }
+
+    private ListNode<T>? SortedMerge(ListNode<T>? a, ListNode<T>? b)
+    {
+        if (a == null)
+            return b;
+        if (b == null)
+            return a;
+
+        if (Comparer<T>.Default.Compare(a.Value, b.Value) <= 0)
+        {
+            a.Next = SortedMerge(a.Next, b);
+            return a;
+        }
+        else
+        {
+            b.Next = SortedMerge(a, b.Next);
+            return b;
+        }
+    }
     public IEnumerator<T> GetEnumerator()
     {
         ListNode<T>? current = _head;
